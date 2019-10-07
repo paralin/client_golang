@@ -17,6 +17,7 @@ package prometheus
 
 import (
 	"github.com/prometheus/procfs"
+	"os"
 )
 
 func canCollectProcess() bool {
@@ -61,5 +62,13 @@ func (c *processCollector) processCollect(ch chan<- Metric) {
 		ch <- MustNewConstMetric(c.maxVsize, GaugeValue, float64(limits.AddressSpace))
 	} else {
 		c.reportError(ch, nil, err)
+	}
+}
+
+// getPidFn returns the pidFn for this platform.
+func getPidFn() func() (int, error) {
+	pid := os.Getpid()
+	return func() (int, error) {
+		return pid, nil
 	}
 }

@@ -20,3 +20,10 @@ func canCollectProcess() bool {
 }
 
 func (c *processCollector) processCollect(ch chan<- Metric) {}
+
+// getPidFn returns the pidFn for this platform.
+func getPidFn() func() (int, error) {
+	return func() (int, error) {
+		return 1, nil
+	}
+}

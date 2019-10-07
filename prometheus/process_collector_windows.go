@@ -14,6 +14,7 @@
 package prometheus
 
 import (
+	"os"
 	"syscall"
 	"unsafe"
 
@@ -113,4 +114,12 @@ func (c *processCollector) processCollect(ch chan<- Metric) {
 
 func fileTimeToSeconds(ft windows.Filetime) float64 {
 	return float64(uint64(ft.HighDateTime)<<32+uint64(ft.LowDateTime)) / 1e7
+}
+
+// getPidFn returns the pidFn for this platform.
+func getPidFn() func() (int, error) {
+	pid := os.Getpid()
+	return func() (int, error) {
+		return pid, nil
+	}
 }
