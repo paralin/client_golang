@@ -17,7 +17,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -104,8 +103,7 @@ func NewProcessCollector(opts ProcessCollectorOpts) Collector {
 	}
 
 	if opts.PidFn == nil {
-		pid := os.Getpid()
-		c.pidFn = func() (int, error) { return pid, nil }
+		c.pidFn = getPIDFn()
 	} else {
 		c.pidFn = opts.PidFn
 	}
